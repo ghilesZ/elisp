@@ -1,39 +1,3 @@
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(inhibit-startup-screen t))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
-(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
-;; ## end of OPAM user-setup addition for emacs / base ## keep this line
-
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(rainbow-delimiters-depth-1-face ((t (:foreground "navajo white"))))
- '(rainbow-delimiters-depth-2-face ((t (:foreground "sandy brown"))))
- '(rainbow-delimiters-depth-3-face ((t (:foreground "indian red"))))
- '(rainbow-delimiters-depth-4-face ((t (:foreground "navajo white"))))
- '(rainbow-delimiters-depth-5-face ((t (:foreground "sandy brown"))))
- '(rainbow-delimiters-depth-6-face ((t (:foreground "indian red"))))
- '(rainbow-delimiters-depth-7-face ((t (:foreground "navajo white"))))
- '(rainbow-delimiters-depth-8-face ((t (:foreground "sandy brown"))))
- '(rainbow-delimiters-depth-9-face ((t (:foreground "indian red"))))
- '(rainbow-delimiters-unmatched-face ((t (:foreground "red")))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;; END OF CUSTOM ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                    PACKAGE STUFF                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -144,10 +108,6 @@
    (interactive)
    (load-file "~/.emacs")                   ;;reload .emacs
    )
-(add-hook 'after-save-hook
-          (lambda ()
-            (when (equal buffer-file-name "/home/gg/.emacs")
-              (reloademacs))))
 
 ;;Save the point position for every file, and restore it when that file is reloaded.
 (use-package saveplace
