@@ -24,10 +24,11 @@
 
 ;; in case there are tuples, we explode them
 (defun handleatom(typ)
-  (let((nostar (replace-regexp-in-string "*" "," typ)))
+  (let((typregexp "['A-Za-z ]+")
+       (nostar (replace-regexp-in-string "*" "," typ)))
     (concat
      "("
-     (replace-regexp-in-string  "['A-Za-z ]+" (lambda (x) (namegen)) nostar)
+     (replace-regexp-in-string typregexp (lambda (x) (namegen)) nostar)
      ":"
      typ
      ") "
