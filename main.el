@@ -34,9 +34,15 @@
 (column-number-mode 1)
 (line-number-mode 1)
 
-;; colors
-(set-foreground-color "#DDCCAA")
-(set-background-color "#223355")
+;; colors customization. Works with emacsclient
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+        (lambda (frame)
+          (select-frame frame)
+          (set-foreground-color "#DDCCAA")
+          (set-background-color "#223355")))
+  (set-foreground-color "#DDCCAA")
+  (set-background-color "#223355"))
 
 ;; Display color on color-code string (hex/rgb) directly.
 (require 'rainbow-mode)
@@ -102,13 +108,6 @@
    kept-old-versions 2
    version-control t)       ; use versioned backups
 
-;;automatically reload .emacs after editing it
-(defun reloademacs()
-  "reload .emacs file whenever it is saved"
-   (interactive)
-   (load-file "~/.emacs")                   ;;reload .emacs
-   )
-
 ;;Save the point position for every file, and restore it when that file is reloaded.
 (use-package saveplace
    :init
@@ -152,7 +151,8 @@
 (autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
 (add-hook 'tuareg-mode-hook 'utop-minor-mode)
 
-(load "~/gg/elisp/sig2fun")
+;; customization of ocaml mode
+(load "~/elisp/sig2fun")
 (add-hook 'tuareg-mode-hook
           (lambda ()
             (global-set-key (kbd "<f9>") 'sig2funregion)))
@@ -169,7 +169,7 @@
 
 ;;reload .emacs
 (defun reloademacs()
- "reload .emacs file whenever it is saved"
+ "reload .emacs file"
  (interactive)
  (load-file "~/.emacs"))
 
@@ -183,9 +183,9 @@
 ;; kill current buffer a s-k
 (global-set-key (kbd "s-k") 'kill-this-buffer)
 
-;;repository tree
-(require 'neotree)
-(global-set-key [f8] 'neotree-toggle)
+;; ;;repository tree
+;; (require 'neotree)
+;; (global-set-key [f8] 'neotree-toggle)
 
 ;; Symetrical of C-x o
 (defun switch-to-previous-buffer ()
@@ -208,6 +208,7 @@ Repeated invocations toggle between the two most recently open buffers."
 ;;                       COMPILE STUFF                       ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Compilation command to closest Makefile
 (defun* get-closest-pathname (&optional (file "Makefile"))
   "Determine the pathname of the first instance of FILE starting from
 the current directory towards root.  This may not do the correct thing
@@ -224,8 +225,13 @@ the name of FILE in the current directory, suitable for creation"
        if (equal d root)
        return nil)))))
 
+;; redefining compile command
 (require 'compile)
 (add-hook 'prog-mode-hook
           (lambda ()
             (set (make-local-variable 'compile-command)
                  (format "cd %s; make" (get-closest-pathname)))))
+
+
+;; jump to first error when compiling
+(setq compilation-auto-jump-to-first-error t)
