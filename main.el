@@ -216,6 +216,9 @@ Repeated invocations toggle between the two most recently open buffers."
     ) ;;revert buffer
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
 
+(global-set-key (kbd "C-+") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                       COMPILE STUFF                       ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
