@@ -77,12 +77,6 @@
 ;; colors in shell mode
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
-;; colors in compilation buffer
-(defun colorize-compilation-buffer ()
-  (toggle-read-only)
-  (ansi-color-apply-on-region compilation-filter-start (point))
-  (toggle-read-only))
-(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                    USAGE STUFF                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -248,5 +242,15 @@ the name of FILE in the current directory, suitable for creation"
                  (format "cd %s; make" (get-closest-pathname)))))
 
 
-;; jump to first error when compiling
+;; jump to first error in code when compiling
 (setq compilation-auto-jump-to-first-error t)
+
+;; set compilation output to first error
+(setq compilation-scroll-output 'first-error)
+
+;; colors in compilation buffer
+(defun colorize-compilation-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region compilation-filter-start (point))
+  (toggle-read-only))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
