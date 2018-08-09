@@ -162,6 +162,20 @@
 (add-hook 'tuareg-mode-hook
           (lambda ()
             (global-set-key (kbd "<f9>") 'sig2funregion)))
+
+;; now consider the '_' as part of a word
+(add-hook 'merlin-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                       LATEX STUFF                         ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; now consider the '\' as part of a word
+(add-hook 'tex-mode-hook #'(lambda () (modify-syntax-entry ?\\ "w")))
+
+;; now consider the '_' as part of a word
+(add-hook 'tex-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                       EMACS STUFF                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -217,7 +231,7 @@ Repeated invocations toggle between the two most recently open buffers."
 ;;                       COMPILE STUFF                       ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Compilation command to closest Makefile
+;; path to closest Makefile
 (defun* get-closest-pathname (&optional (file "Makefile"))
   "Determine the pathname of the first instance of FILE starting from
 the current directory towards root.  This may not do the correct thing
