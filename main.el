@@ -18,6 +18,10 @@
 ;; full screen
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
+;; vertical split as default
+(setq split-height-threshold nil)
+(setq split-width-threshold 10)
+
 ;; No scratch message
 (setq initial-scratch-message "")
 
@@ -139,6 +143,7 @@
 ;; Add opam emacs directory to the load-path
 (setq opam-share (substring (shell-command-to-string "opam config var share 2> /dev/null") 0 -1))
 (add-to-list 'load-path (concat opam-share "/emacs/site-lisp"))
+
 ;; Load merlin-mode
 (require 'merlin)
 ;; Start merlin on ocaml files
@@ -209,7 +214,7 @@
 the current directory towards root.  This may not do the correct thing
 in presence of links. If it does not find FILE, then it shall return
 the name of FILE in the current directory, suitable for creation"
-  (let ((root (expand-file-name "/"))) ; should work win win32 emacs
+  (let ((root (expand-file-name "/"))) ; should work with win32 emacs
     (file-name-directory
      (expand-file-name
       file
