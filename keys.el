@@ -4,9 +4,9 @@
 ;; kill current buffer a s-k
 (global-set-key (kbd "s-k") 'kill-this-buffer)
 
-;; ;;repository tree
-;; (require 'neotree)
-;; (global-set-key [f8] 'neotree-toggle)
+;;repository tree
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
 
 ;; Symetrical of C-x o
 (defun switch-to-previous-buffer ()

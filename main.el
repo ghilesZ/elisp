@@ -15,15 +15,33 @@
 ;;                    DISPLAY STUFF                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;--------------------------------------------
+
 ;; full screen
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-;; vertical split as default
-(setq split-height-threshold nil)
-(setq split-width-threshold 10)
-
 ;; No scratch message
 (setq initial-scratch-message "")
+
+;; free from the hell of annoying buffers such like *Help*, *Completions*, *compilation*, and etc.
+(require 'popwin)
+(popwin-mode 1)
+
+;; colors customization. Works with emacsclient
+
+(defun colorize()
+  (set-foreground-color "#DDCCAA")
+  (set-background-color "#223355")
+  ;; colorizing margins also
+  (set-face-attribute 'fringe nil :background "#223355" :foreground "#DDCCAA")
+  )
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+        (lambda (frame)
+          (select-frame frame)
+          (colorize))
+        ))
+(colorize)
 
 ;; No toolbars No scrollbars
 (when (window-system)
@@ -37,16 +55,6 @@
 (global-linum-mode 1)
 (column-number-mode 1)
 (line-number-mode 1)
-
-;; colors customization. Works with emacsclient
-(if (daemonp)
-    (add-hook 'after-make-frame-functions
-        (lambda (frame)
-          (select-frame frame)
-          (set-foreground-color "#DDCCAA")
-          (set-background-color "#223355")))
-  (set-foreground-color "#DDCCAA")
-  (set-background-color "#223355"))
 
 ;; Display color on color-code string (hex/rgb) directly.
 (require 'rainbow-mode)
@@ -130,6 +138,14 @@
 ;; Supprime tous les espaces en fin de ligne lors de la sauvegarde
 (add-hook 'prog-mode-hook
           (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
+
+;; auto-completion on pairable things.
+(setq skeleton-pair t)
+(global-set-key (kbd "(") 'skeleton-pair-insert-maybe)
+(global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
+(global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
+(global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
+;;(global-set-key (kbd "'") 'skeleton-pair-insert-maybe) not wanted in elisp, ocaml ...
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                 OCAML STUFF                         ;;
@@ -230,8 +246,8 @@ the name of FILE in the current directory, suitable for creation"
 (add-hook 'prog-mode-hook
           (lambda ()
             (set (make-local-variable 'compile-command)
-                 (format "cd %s; make" (get-closest-pathname)))))
-
+                 (format "cd %s; make" (get-closest-pathname)))
+            ))
 
 ;; jump to first error in code when compiling
 (setq compilation-auto-jump-to-first-error t)
@@ -245,3 +261,8 @@ the name of FILE in the current directory, suitable for creation"
   (ansi-color-apply-on-region compilation-filter-start (point))
   (toggle-read-only))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
+;; Makefiles are picky about whitespaces at the end of lines
+(add-hook 'makefile-mode-hook
+          (lambda()
+            (setq show-trailing-whitespace t)))
