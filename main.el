@@ -1,3 +1,13 @@
+(custom-set-faces
+ '(rainbow-delimiters-depth-1-face ((t (:foreground "white"))))
+ '(rainbow-delimiters-depth-2-face ((t (:foreground "green1"))))
+ '(rainbow-delimiters-depth-3-face ((t (:foreground "yellow"))))
+ '(rainbow-delimiters-depth-4-face ((t (:foreground "turquoise"))))
+ '(rainbow-delimiters-depth-5-face ((t (:foreground "white"))))
+ '(rainbow-delimiters-depth-6-face ((t (:foreground "green1"))))
+ '(rainbow-delimiters-depth-7-face ((t (:foreground "yellow"))))
+ '(rainbow-delimiters-depth-8-face ((t (:foreground "turquoise"))))
+ )
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                    PACKAGE STUFF                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -28,7 +38,6 @@
 (popwin-mode 1)
 
 ;; colors customization. Works with emacsclient
-
 (defun colorize()
   (set-foreground-color "#DDCCAA")
   (set-background-color "#223355")
@@ -102,9 +111,14 @@
 (ac-config-default)
 (global-auto-complete-mode t)
 
-;; best search and replace
+;; better search and replace
 (require 'anzu)
 (global-anzu-mode 1)
+
+;; search over linebreaks and tabs
+(setq isearch-lax-whitespace t)
+(setq isearch-regexp-lax-whitespace t)
+(setq search-whitespace-regexp "[ \t\r\n]+")
 
 ;; remplace les tabs par 2 espaces
 (setq-default indent-tabs-mode nil)
