@@ -287,3 +287,6 @@ the name of FILE in the current directory, suitable for creation"
 (add-hook 'makefile-mode-hook
           (lambda()
             (setq show-trailing-whitespace t)))
+
+;; (ido-mode 1)
+(ido-mode 1)

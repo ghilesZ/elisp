@@ -45,3 +45,6 @@ Repeated invocations toggle between the two most recently open buffers."
 
 (global-set-key  (kbd "C-<right>") 'forward-jump)
 (global-set-key (kbd "C-<left>") 'backward-jump)
+
+;; nice autoresize windows
+(global-set-key [f9] 'balance-windows)
