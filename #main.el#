@@ -288,5 +288,5 @@ the name of FILE in the current directory, suitable for creation"
           (lambda()
             (setq show-trailing-whitespace t)))
 
-;; completion engine: super saiyan mode
+;; (ido-mode 1)
 (ido-mode 1)
