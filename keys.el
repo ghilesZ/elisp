@@ -48,3 +48,6 @@ Repeated invocations toggle between the two most recently open buffers."
 
 ;; nice autoresize windows
 (global-set-key [f9] 'balance-windows)
+
+;; git status inside emacs
+(global-set-key (kbd "C-x g") 'magit-status)
