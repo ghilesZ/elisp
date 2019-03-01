@@ -37,6 +37,9 @@
 (require 'popwin)
 (popwin-mode 1)
 
+;; title bar shows name of current buffer.
+(setq frame-title-format '("emacs: %*%+ %b"))
+
 ;; colors customization. Works with emacsclient
 (defun colorize()
   (set-foreground-color "#DDCCAA")
@@ -59,13 +62,13 @@
     (horizontal-scroll-bar-mode -1))
   (scroll-bar-mode -1))
 
-;; numeros de lignes, colonnes
+;; line number, column number
 (require 'linum)
 (global-linum-mode 1)
 (column-number-mode 1)
 (line-number-mode 1)
 
-;; Display color on color-code string (hex/rgb) directly.
+;; Display color on color-code string (hex/rgb) directly. eg #FFF or red
 (require 'rainbow-mode)
 (add-hook 'prog-mode-hook #'rainbow-mode)
 
@@ -80,7 +83,7 @@
 (setq whitespace-space 'underline)
 (add-hook 'prog-mode-hook 'whitespace-mode)
 
-;; Recherche automatique des parenthèses ouvrantes et fermantes
+;; closing parenthesis highlight
 (load-library "paren")
 (show-paren-mode 1)
 
@@ -102,7 +105,7 @@
 ;;                    USAGE STUFF                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; accent circonflexe entre autres
+;; special : dead accent key
 (load-library "iso-transl")
 
 ;; autocomplete
@@ -120,7 +123,7 @@
 (setq isearch-regexp-lax-whitespace t)
 (setq search-whitespace-regexp "[ \t\r\n]+")
 
-;; remplace les tabs par 2 espaces
+;; replaces tabs with 2 spaces
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
 
@@ -149,7 +152,7 @@
          save-place-skip-check-regexp
          "\\`/\\(?:cdrom\\|floppy\\|mnt\\|/[0-9]\\|\\(?:[^@/:]*@\\)?[^@/:]*[^@/:.]:\\)"))
 
-;; Supprime tous les espaces en fin de ligne lors de la sauvegarde
+;; deletes all the spaces at the end of a line when saving
 (add-hook 'prog-mode-hook
           (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
 
@@ -207,6 +210,12 @@
 
 (load "~/elisp/absolute")
 (add-hook 'absolute-mode-hook #'rainbow-delimiters-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                    Ilpml Mode                       ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(load "~/elisp/ilpml")
+(setq auto-mode-alist (cons '("\\.ilpml\\w?" . ilpml-mode) auto-mode-alist))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                       LATEX STUFF                         ;;
@@ -286,6 +295,7 @@ the name of FILE in the current directory, suitable for creation"
 ;; Makefiles are picky about whitespaces at the end of lines
 (add-hook 'makefile-mode-hook
           (lambda()
+            (global-whitespace-mode t)
             (setq show-trailing-whitespace t)))
 
 ;; completion engine: super saiyan mode

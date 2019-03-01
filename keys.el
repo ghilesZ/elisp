@@ -1,9 +1,6 @@
 ;; set autocompletion to ctrl + tab
 (global-set-key (kbd "C-<tab>") 'auto-complete)
 
-;; kill current buffer a s-k
-(global-set-key (kbd "s-k") 'kill-this-buffer)
-
 ;;repository tree
 (require 'neotree)
 (global-set-key [f8] 'neotree-toggle)
@@ -25,8 +22,12 @@ Repeated invocations toggle between the two most recently open buffers."
     ) ;;revert buffer
 (global-set-key (kbd "<f5>") 'revert-buffer-no-confirm)
 
+;; zoom with Ctrl-+ Ctrl--
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
+;; zoom with Ctrl-mouse-wheel
+(global-set-key [C-mouse-4] 'text-scale-increase)
+(global-set-key [C-mouse-5] 'text-scale-decrease)
 
 ;; customization of C-<RIGHT> (resp. C-<LEFT>) to make it switch
 ;; between forward-word (resp. backward-word) and forward-list
@@ -51,3 +52,9 @@ Repeated invocations toggle between the two most recently open buffers."
 
 ;; git status inside emacs
 (global-set-key (kbd "C-x g") 'magit-status)
+
+;; shows the possible completion of a key binding
+(use-package which-key
+  :ensure t
+  :config (which-key-mode)
+  )
