@@ -21,86 +21,6 @@
 
 (package-initialize)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;                    DISPLAY STUFF                         ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;--------------------------------------------
-
-;; full screen
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-;; No scratch message
-(setq initial-scratch-message "")
-
-;; free from the hell of annoying buffers such like *Help*, *Completions*, *compilation*, and etc.
-(require 'popwin)
-(popwin-mode 1)
-
-;; title bar shows name of current buffer.
-(setq frame-title-format '("emacs: %*%+ %b"))
-
-;; colors customization. Works with emacsclient
-(defun colorize()
-  (set-foreground-color "#DDCCAA")
-  (set-background-color "#223355")
-  ;; colorizing margins also
-  (set-face-attribute 'fringe nil :background "#223355" :foreground "#DDCCAA")
-  )
-(if (daemonp)
-    (add-hook 'after-make-frame-functions
-        (lambda (frame)
-          (select-frame frame)
-          (colorize))
-        ))
-(colorize)
-
-;; No toolbars No scrollbars
-(when (window-system)
-  (tool-bar-mode 0)
-  (when (fboundp 'horizontal-scroll-bar-mode)
-    (horizontal-scroll-bar-mode -1))
-  (scroll-bar-mode -1))
-
-;; line number, column number
-(require 'linum)
-(global-linum-mode 1)
-(column-number-mode 1)
-(line-number-mode 1)
-
-;; Display color on color-code string (hex/rgb) directly. eg #FFF or red
-(require 'rainbow-mode)
-(add-hook 'prog-mode-hook #'rainbow-mode)
-
-;; Highlights parentheses, brackets, and braces according to their depth
-(require 'rainbow-delimiters)
-(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-
-;; 80 col rule
-(require 'whitespace)
-(setq whitespace-line-column 80) ;; limit line length
-(setq whitespace-style '(face lines-tail))
-(setq whitespace-space 'underline)
-(add-hook 'prog-mode-hook 'whitespace-mode)
-
-;; closing parenthesis highlight
-(load-library "paren")
-(show-paren-mode 1)
-
-;; Various keywords (in comments) are now flagged in a Red Error font
-(add-hook
- 'prog-mode-hook
- (lambda ()
-   (font-lock-add-keywords
-    nil
-    '(("\\<\\(FIX\\|FIXME\\|TODO\\|BUG\\|HACK\\):" 1 font-lock-warning-face t)))))
-
-;; colors stuff
-(require 'ansi-color)
-
-;; colors in shell mode
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                    USAGE STUFF                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -162,7 +82,24 @@
 (global-set-key (kbd "{") 'skeleton-pair-insert-maybe)
 (global-set-key (kbd "[") 'skeleton-pair-insert-maybe)
 (global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
-;;(global-set-key (kbd "'") 'skeleton-pair-insert-maybe) not wanted in elisp, ocaml ...
+;;(global-set-key (kbd "'") 'skeleton-pair-insert-maybe) not wanted in
+;;elisp, ocaml ...
+
+;; Fixing the fix below:
+;; Prevents issue where you have to press backspace twice when
+;; trying to remove the first character that fails a search
+(define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
+
+;; Avoids hitting C-s again to wraps the search when Failing I-search
+;; is triggered
+(defadvice isearch-search (after isearch-no-fail activate)
+  (unless isearch-success
+    (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
+    (ad-activate 'isearch-search)
+    (isearch-repeat (if isearch-forward 'forward))
+    (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
+    (ad-activate 'isearch-search)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                 OCAML STUFF                         ;;
@@ -243,6 +180,12 @@
  "reload .emacs file"
  (interactive)
  (load-file "~/.emacs"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                    DISPLAY STUFF                         ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(load "~/elisp/display")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                    KEY BINDINGS STUFF                     ;;
