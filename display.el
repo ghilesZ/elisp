@@ -12,7 +12,7 @@
 ;; title bar shows name of current buffer.
 (setq frame-title-format '("emacs: %*%+ %b"))
 
-;; colors customization. Works with emacsclient
+;; colors customization. Works also with emacsclient
 (defun colorize()
   (set-foreground-color "#DDCCAA")
   (set-background-color "#223355")
@@ -65,7 +65,7 @@
  (lambda ()
    (font-lock-add-keywords
     nil
-    '(("\\<\\(FIX\\|FIXME\\|TODO\\|BUG\\|HACK\\):" 1 font-lock-warning-face t)))))
+    '(("\\<\\(FIX\\|FIXME\\|TODO\\|BUG\\|HACK|WARNING\\):" 1 font-lock-warning-face t)))))
 
 ;; colors stuff
 (require 'ansi-color)

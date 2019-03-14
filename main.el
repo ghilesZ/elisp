@@ -34,9 +34,24 @@
 (ac-config-default)
 (global-auto-complete-mode t)
 
-;; better search and replace
+;; better search and replace that shows the number of occurences
 (require 'anzu)
 (global-anzu-mode 1)
+
+;; Fixing the fix below:
+;; Prevents issue where you have to press backspace twice when
+;; trying to remove the first character that fails a search
+(define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
+
+;; Avoids hitting C-s again to wraps the search when Failing I-search
+;; is triggered
+(defadvice isearch-search (after isearch-no-fail activate)
+  (unless isearch-success
+    (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
+    (ad-activate 'isearch-search)
+    (isearch-repeat (if isearch-forward 'forward))
+    (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
+    (ad-activate 'isearch-search)))
 
 ;; search over linebreaks and tabs
 (setq isearch-lax-whitespace t)
@@ -84,22 +99,6 @@
 (global-set-key (kbd "\"") 'skeleton-pair-insert-maybe)
 ;;(global-set-key (kbd "'") 'skeleton-pair-insert-maybe) not wanted in
 ;;elisp, ocaml ...
-
-;; Fixing the fix below:
-;; Prevents issue where you have to press backspace twice when
-;; trying to remove the first character that fails a search
-(define-key isearch-mode-map [remap isearch-delete-char] 'isearch-del-char)
-
-;; Avoids hitting C-s again to wraps the search when Failing I-search
-;; is triggered
-(defadvice isearch-search (after isearch-no-fail activate)
-  (unless isearch-success
-    (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
-    (ad-activate 'isearch-search)
-    (isearch-repeat (if isearch-forward 'forward))
-    (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
-    (ad-activate 'isearch-search)))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                 OCAML STUFF                         ;;
@@ -151,6 +150,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                    Ilpml Mode                       ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (load "~/elisp/ilpml")
 (setq auto-mode-alist (cons '("\\.ilpml\\w?" . ilpml-mode) auto-mode-alist))
 
@@ -164,6 +164,12 @@
 ;; now consider the '_' as part of a word
 (add-hook 'tex-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 
+;; activate ispell on tex file
+(add-hook 'tex-mode-hook #'(lambda () (modify-syntax-entry ?\\ "w")))
+
+;; Display mini table of content in separate buffer with "ctrl+c ="
+(add-hook 'tex-mode-hook 'turn-on-reftex)
+(setq reftex-plug-into-AUCTeX t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                       EMACS STUFF                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -222,11 +228,17 @@ the name of FILE in the current directory, suitable for creation"
                  (format "cd %s; make" (get-closest-pathname)))
             ))
 
+;; I'm not scared of saving everything.
+(setq compilation-ask-about-save nil)
+
 ;; jump to first error in code when compiling
 (setq compilation-auto-jump-to-first-error t)
 
 ;; set compilation output to first error
 (setq compilation-scroll-output 'first-error)
+
+;; Don't stop on info or warnings.
+(setq compilation-skip-threshold 2)
 
 ;; colors in compilation buffer
 (defun colorize-compilation-buffer ()
