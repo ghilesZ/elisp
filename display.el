@@ -34,6 +34,9 @@
     (horizontal-scroll-bar-mode -1))
   (scroll-bar-mode -1))
 
+;; default behaviour of split window
+(setq split-width-threshold 50)
+
 ;; line number, column number
 (require 'linum)
 (global-linum-mode 1)

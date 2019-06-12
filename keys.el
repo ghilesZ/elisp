@@ -59,6 +59,8 @@ Repeated invocations toggle between the two most recently open buffers."
   :config (which-key-mode)
   )
 
+
+
 ;; Toggle ispell's langage spell check
 (global-set-key [f3] (lambda () (interactive)
                        (if (equal ispell-current-dictionary "francais")

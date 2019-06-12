@@ -137,6 +137,11 @@
           (lambda ()
             (global-set-key (kbd "<f9>") 'sig2funregion)))
 
+;; bind ml/mli switch to "ctrl+i""
+(add-hook 'tuareg-mode-hook
+          (lambda ()
+            (global-set-key (kbd "C-:") 'tuareg-find-alternate-file)))
+
 ;; now consider the '_' as part of a word
 (add-hook 'merlin-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 
@@ -163,9 +168,6 @@
 
 ;; now consider the '_' as part of a word
 (add-hook 'tex-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
-
-;; activate ispell on tex file
-(add-hook 'tex-mode-hook #'(lambda () (modify-syntax-entry ?\\ "w")))
 
 ;; Display mini table of content in separate buffer with "ctrl+c ="
 (add-hook 'tex-mode-hook 'turn-on-reftex)
