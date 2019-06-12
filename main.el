@@ -137,7 +137,7 @@
           (lambda ()
             (global-set-key (kbd "<f9>") 'sig2funregion)))
 
-;; bind ml/mli switch to "ctrl+i""
+;; bind ml/mli switch to "ctrl+:""
 (add-hook 'tuareg-mode-hook
           (lambda ()
             (global-set-key (kbd "C-:") 'tuareg-find-alternate-file)))
