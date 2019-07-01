@@ -129,18 +129,13 @@
 
 ;; Set utop as default toplevel in tuareg mode
 (autoload 'utop-minor-mode "utop" "Minor mode for utop" t)
-(add-hook 'tuareg-mode-hook 'utop-minor-mode)
+(add-hook 'tuareg-mode-hook 'utop-minor-mode t)
 
 ;; customization of ocaml mode
 (load "~/elisp/sig2fun")
 (add-hook 'tuareg-mode-hook
           (lambda ()
             (global-set-key (kbd "<f9>") 'sig2funregion)))
-
-;; bind ml/mli switch to "ctrl+:""
-(add-hook 'tuareg-mode-hook
-          (lambda ()
-            (global-set-key (kbd "C-:") 'tuareg-find-alternate-file)))
 
 ;; now consider the '_' as part of a word
 (add-hook 'merlin-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
@@ -172,6 +167,7 @@
 ;; Display mini table of content in separate buffer with "ctrl+c ="
 (add-hook 'tex-mode-hook 'turn-on-reftex)
 (setq reftex-plug-into-AUCTeX t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                       EMACS STUFF                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -257,3 +253,29 @@ the name of FILE in the current directory, suitable for creation"
 
 ;; completion engine: super saiyan mode
 (ido-mode 1)
+
+;; Open the file name being pointed in an other window or dired
+;; reference: http://kouzuka.blogspot.com/2011/02/emacsurlfinder.html
+(defun my-directory-or-file-p (path)
+  "return t if path is a directory,
+return nil if path is a file"
+  (car (file-attributes path)))
+
+(defun my-open-emacs-at-point ()
+  "open the file with opening emacs"
+  (interactive)
+  (require 'ffap)
+  (let ((file (or (ffap-url-at-point)
+                  (ffap-file-at-point))))
+    (unless (stringp file)
+      (error"No file or URL found"))
+    (when (file-exists-p (expand-file-name file))
+      (setq file (expand-file-name file)))
+    (message "Open: %s" file)
+
+    (if (my-directory-or-file-p file)
+      (dired-other-window file)
+      (find-file-other-window file))
+    ))
+
+(global-set-key (kbd "\C-x C-g") 'my-open-emacs-at-point)
