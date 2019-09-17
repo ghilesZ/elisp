@@ -255,7 +255,6 @@ the name of FILE in the current directory, suitable for creation"
 (ido-mode 1)
 
 ;; Open the file name being pointed in an other window or dired
-;; reference: http://kouzuka.blogspot.com/2011/02/emacsurlfinder.html
 (defun my-directory-or-file-p (path)
   "return t if path is a directory,
 return nil if path is a file"
