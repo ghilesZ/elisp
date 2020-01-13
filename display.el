@@ -38,10 +38,13 @@
 (setq split-width-threshold 50)
 
 ;; line number, column number
-(require 'linum)
-(global-linum-mode 1)
-(column-number-mode 1)
-(line-number-mode 1)
+;; (require 'linum)
+;; (global-linum-mode 1)
+;; (column-number-mode 1)
+;; (line-number-mode 1)
+;; since emacs26
+(when (version<= "26.0.50" emacs-version )
+  (global-display-line-numbers-mode))
 
 ;; Display color on color-code string (hex/rgb) directly. eg #FFF or red
 (require 'rainbow-mode)

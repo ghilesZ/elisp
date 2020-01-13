@@ -12,14 +12,30 @@
 ;;                    PACKAGE STUFF                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'package)
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")))
+; list the packages i want
+(setq package-list '(anzu auto-complete neotree rainbow-mode))
 
-;; Apparently needed for the package auto-complete
+; list the repositories containing them
+(setq package-archives '(("elpa" . "http://tromey.com/elpa/")
+                         ("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")))
+
+;; needed for some packages
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+             '("melpa" . "http://melpa.org/packages/") t)
 
+
+; activate all the packages (in particular autoloads)
 (package-initialize)
+
+; fetch the list of packages available 
+(unless package-archive-contents
+  (package-refresh-contents))
+
+;; very nice: install the missing packages
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                    USAGE STUFF                         ;;
@@ -27,12 +43,6 @@
 
 ;; special : dead accent key
 (load-library "iso-transl")
-
-;; autocomplete
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-20140414/dict")
-(ac-config-default)
-(global-auto-complete-mode t)
 
 ;; better search and replace that shows the number of occurences
 (require 'anzu)
