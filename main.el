@@ -28,7 +28,7 @@
 ; activate all the packages (in particular autoloads)
 (package-initialize)
 
-; fetch the list of packages available 
+; fetch the list of packages available
 (unless package-archive-contents
   (package-refresh-contents))
 
@@ -47,6 +47,12 @@
 ;; better search and replace that shows the number of occurences
 (require 'anzu)
 (global-anzu-mode 1)
+
+;; colum number
+(setq colum-number-mode t)
+
+;; auto-complete
+(setq auto-complete-mode t)
 
 ;; Fixing the fix below:
 ;; Prevents issue where you have to press backspace twice when
@@ -118,7 +124,8 @@
 (setq auto-mode-alist (cons '("\\.ml\\w?" . tuareg-mode) auto-mode-alist))
 (autoload 'tuareg-mode "tuareg" "Mode majeur pour éditer du code Caml" t)
 (autoload 'camldebug "camldebug" "Exécuter le débogueur Caml" t)
-
+(load
+   "/home/disc/g.ziat/.opam/4.09.0/share/emacs/site-lisp/tuareg-site-file")
 ;; Start tuareg menhir on mly files
 (setq auto-mode-alist (cons '("\\.mly\\w?" . tuareg-menhir-mode) auto-mode-alist))
 

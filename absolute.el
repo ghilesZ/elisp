@@ -3,7 +3,7 @@
 (define-generic-mode 'absolute-mode          ;; name of the mode to create
   '("/*" "*/")                               ;; comments: '/* some comment */'
   '("init" "constraints" "solutions"
-    "real" "int")                            ;; keywords
+    "real" "int" "in")                       ;; keywords
   '(("\\(?:cos\\|exp\\|s\\(?:in\\|qrt\\)\\)"
      . 'font-lock-function-name-face))       ;; function name
   '("\\.abs$")                               ;; Absolute problem description
