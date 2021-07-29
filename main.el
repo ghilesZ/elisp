@@ -160,6 +160,12 @@
 ;; now consider the '_' as part of a word
 (add-hook 'merlin-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 
+;; autoformating on saving
+(require 'ocamlformat)
+(add-hook 'tuareg-mode-hook (lambda ()
+  (define-key tuareg-mode-map (kbd "C-M-<tab>") #'ocamlformat)
+  (add-hook 'before-save-hook #'ocamlformat-before-save)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                       AbSolute Mode                       ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
