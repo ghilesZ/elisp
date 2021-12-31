@@ -124,8 +124,6 @@
 (setq auto-mode-alist (cons '("\\.ml\\w?" . tuareg-mode) auto-mode-alist))
 (autoload 'tuareg-mode "tuareg" "Mode majeur pour éditer du code Caml" t)
 (autoload 'camldebug "camldebug" "Exécuter le débogueur Caml" t)
-(load
-   "/home/disc/g.ziat/.opam/4.09.0/share/emacs/site-lisp/tuareg-site-file")
 ;; Start tuareg menhir on mly files
 (setq auto-mode-alist (cons '("\\.mly\\w?" . tuareg-menhir-mode) auto-mode-alist))
 
@@ -139,7 +137,8 @@
 (add-hook 'tuareg-mode-hook 'merlin-mode t)
 (add-hook 'caml-mode-hook 'merlin-mode t)
 ;; Enable auto-complete
-(setq merlin-use-auto-complete-mode 'easy)
+(require 'merlin-ac)
+(setq merlin-ac-setup 'easy)
 ;; Use opam switch to lookup ocamlmerlin binary
 (setq merlin-command 'opam)
 (put 'upcase-region 'disabled nil)
@@ -158,7 +157,11 @@
             (global-set-key (kbd "<f9>") 'sig2funregion)))
 
 ;; now consider the '_' as part of a word
-(add-hook 'merlin-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+(add-hook 'tuareg-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+
+(require 'ocamlformat)
+(add-hook 'tuareg-mode-hook (lambda ()
+  (add-hook 'before-save-hook #'ocamlformat-before-save)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                       AbSolute Mode                       ;;
@@ -184,6 +187,9 @@
 ;; now consider the '_' as part of a word
 (add-hook 'tex-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 
+;; now consider the '_' as part of a word
+(add-hook 'tex-mode-hook #'(lambda () ))
+
 ;; Display mini table of content in separate buffer with "ctrl+c ="
 (add-hook 'tex-mode-hook 'turn-on-reftex)
 (setq reftex-plug-into-AUCTeX t)
@@ -191,6 +197,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                       EMACS STUFF                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; mail stuff
+(setq user-mail-address "ghiles.ziat@gmail.com"
+      user-full-name "Ghiles Ziat")
+
+(setq gnus-select-method
+      '(nnimap "gmail"
+	       (nnimap-address "imap.gmail.com")  ; it could also be imap.googlemail.com if that's your server.
+	       (nnimap-server-port "imaps")
+	       (nnimap-stream ssl)))
+
+(setq smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587
+      gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
+
+(setq send-mail-function		'smtpmail-send-it
+      message-send-mail-function	'smtpmail-send-it
+      smtpmail-smtp-server		"smtp.gmail.com")
 
 ;; downplay keywords, increase colorizing of the variables
 (use-package color-identifiers-mode
@@ -220,6 +244,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                       COMPILE STUFF                       ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'cl)
 
 ;; path to closest Makefile
 (defun* get-closest-pathname (&optional (file "Makefile"))

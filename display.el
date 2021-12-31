@@ -61,6 +61,9 @@
 (setq whitespace-space 'underline)
 (add-hook 'prog-mode-hook 'whitespace-mode)
 
+;; show trailing whitespaces
+;(setq-default show-trailing-whitespace t)
+
 ;; closing parenthesis highlight
 (load-library "paren")
 (show-paren-mode 1)
@@ -78,3 +81,9 @@
 
 ;; colors in shell mode
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+;; colors in compilation buffer
+(defun colorize-compilation-buffer ()
+  (toggle-read-only)
+  (ansi-color-apply-on-region compilation-filter-start (point))
+  (toggle-read-only))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
