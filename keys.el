@@ -56,10 +56,7 @@ Repeated invocations toggle between the two most recently open buffers."
 ;; shows the possible completion of a key binding
 (use-package which-key
   :ensure t
-  :config (which-key-mode)
-  )
-
-
+  :config (which-key-mode))
 
 ;; Toggle ispell's langage spell check
 (global-set-key [f3] (lambda () (interactive)

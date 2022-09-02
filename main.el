@@ -8,6 +8,11 @@
  '(rainbow-delimiters-depth-7-face ((t (:foreground "yellow"))))
  '(rainbow-delimiters-depth-8-face ((t (:foreground "turquoise"))))
  )
+
+;; remove annoying beep
+(setq visible-bell       nil
+      ring-bell-function #'ignore)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                    PACKAGE STUFF                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -95,17 +100,19 @@
    version-control t)       ; use versioned backups
 
 ;;Save the point position for every file, and restore it when that file is reloaded.
-(use-package saveplace
-   :init
-   (setq-default save-place t)
-   (setq save-place-forget-unreadable-files
-         t
-         save-place-skip-check-regexp
-         "\\`/\\(?:cdrom\\|floppy\\|mnt\\|/[0-9]\\|\\(?:[^@/:]*@\\)?[^@/:]*[^@/:.]:\\)"))
+(if (fboundp #'save-place-mode)
+  (save-place-mode +1)
+  (setq-default save-place t))
 
 ;; deletes all the spaces at the end of a line when saving
 (add-hook 'prog-mode-hook
           (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
+
+;; ignored extensions
+(setq completion-ignored-extensions
+    (append completion-ignored-extensions
+        (quote
+        (".exe" ".cmi" ".cmo" "cmx" ".o"))))
 
 ;; auto-completion on pairable things.
 (setq skeleton-pair t)
@@ -142,7 +149,8 @@
 ;; Use opam switch to lookup ocamlmerlin binary
 (setq merlin-command 'opam)
 (put 'upcase-region 'disabled nil)
-
+;;jump to definition in .ml (not .mli)
+(setq merlin-locate-preference 'ml)
 ;; Use the opam installed utop
 (setq utop-command "opam config exec -- utop -emacs")
 
