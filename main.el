@@ -337,4 +337,9 @@ return nil if path is a file"
       (find-file-other-window file))
     ))
 
+;; open file under cursor
 (global-set-key (kbd "\C-x C-g") 'my-open-emacs-at-point)
+
+;; use 2 spaces as indentation for java files
+(add-hook 'java-mode-hook (lambda ()
+                            (setq c-basic-offset 2)))
